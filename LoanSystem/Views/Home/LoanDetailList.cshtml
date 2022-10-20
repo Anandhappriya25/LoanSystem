@@ -1,0 +1,47 @@
+﻿@using LoanSystem.Models
+@model List<LoanDetails>
+
+<table class="table table-striped table-hover" id="dataTable">
+    <thead style="background-color: lightcyan;">
+        <tr>
+                <th>LoanDetails Id</th>
+                <th>LoanId</th>
+                <th>Paid Amount</th>
+                <th>Balance Amount</th>
+                <th>Balance Duration</th>
+                <th>Total PaidAmount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (LoanDetails loanDetails in Model)
+        {
+            <tr>
+                <td>@loanDetails.LoanDetailsId</td>
+                <td>@loanDetails.LoanId</td>
+                <td>@loanDetails.PaidAmount</td>
+                <td>@loanDetails.BalanceAmount</td>
+                <td>@loanDetails.BalanceDuration</td>
+                <td>@loanDetails.TotalPaidAmount</td>
+                <td>
+                    <a href="/Home/EditPayedLoanDetail/@loanDetails.LoanDetailsId" class="btn btn-primary">Edit</a>
+                    <a href="#" class="btn btn-info"> @(loanDetails.BalanceAmount == 0 ? "Loan Completed" : "Loan Pending") </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    <tfoot>
+        <tr>
+            <td> </td>
+        </tr>
+    </tfoot>
+    </table>
+@section scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#dataTable").DataTable();
+        })
+    </script>
+}

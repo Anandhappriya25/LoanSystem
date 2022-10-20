@@ -1,0 +1,41 @@
+﻿@using LoanSystem.Models
+@model List<LoanDetailDTO>
+
+
+<body style="background-color :violet;">
+    <h2 style="color: black"> Loan Lists</h2>
+    <style>
+        table, th, td {
+            text-align: center;
+        }
+    </style>
+</body>
+<div class="table-body">
+    <table class="table table-striped table-hover" style="background-color: skyblue">
+        <thead style="background-color: cornflowerblue; color: white">
+            <tr>
+                <th>LoanId</th>
+                <th>Loan Name</th>
+                <th>Customer Name</th>
+                <th>Date Of Sanction</th>
+                <th>Loan Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        @*@foreach(LoanDetailDTO loan in Model)*@
+        @foreach (LoanDetailDTO loan in (IEnumerable<LoanDetailDTO>)Model)
+        {
+            <tr>
+                <td>@loan.LoanId</td>
+                <td>@loan.LoanName</td>
+                <td>@loan.CustomerName</td>
+                <td>@loan.DateOfSanction</td>
+                <td>@loan.LoanAmount</td>
+                <td>
+                    <a href="/Home/EditLoan/@loan.LoanId" class="btn btn-primary">Edit</a>
+                    <a href="/Home/CloseLoan/@loan.LoanId" class="btn btn-info">Status</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

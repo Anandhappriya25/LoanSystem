@@ -1,0 +1,60 @@
+﻿@using LoanSystem.Models
+@model Customer
+
+@if (Model == null)
+{
+    <div class="text-primary" align="center"><h2>Create Customer</h2> </div>
+}
+else
+{
+    <div class="text-warning" align="center"><h2>Edit Customer</h2></div>
+}
+<style>
+    .required:after {
+        content: " *";
+        color: red;
+    }
+</style>
+@using (Html.BeginForm(FormMethod.Post, new { id = "AddCustomer" }))
+{
+    <div class="container-fluid bg-info mb-3" align="center">
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="form-label">Customer Id:</label>
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor( x=>x.CustomerId, new{@class="form-control"})
+                @Html.HiddenFor(x=>x.CustomerId, new{@class="form-control"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="required"> Customer Name:</label>
+            </div>
+            <div class="col-2">
+                @Html.TextBoxFor(x=>x.CustomerName, new {@class="form-control", type="string", required = "required", maxlength = "15"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="required">Mobile Number:</label>
+             </div>
+             <div class="col-2">
+                 @Html.TextBoxFor(x=>x.MobileNumber, new {@class="form-control", required = "required",  maxlength = "10"})
+             </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+             <div class="col-2">
+                 <label class="required">Aadhar Number:</label>
+             </div>
+             <div class="col-2">
+                 @Html.TextBoxFor(x=>x.AadharNumber, new {@class="form-control",required = "required" , ErrorMessage = "Aadhar Number is not valid",maxlength = "12"})
+             </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+             <div class="col-2">
+                 <input type="submit" class="btn btn-outline-success" value="Submit" />
+             </div>
+        </div>
+    </div>
+}

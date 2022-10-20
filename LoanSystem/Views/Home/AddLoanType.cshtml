@@ -1,0 +1,46 @@
+﻿@using LoanSystem.Models
+@model LoanType
+
+@if (Model == null)
+{
+    <div class="text-primary" align="center"><h2>Add LoanType</h2> </div>
+}
+else
+{
+    <div class="text-warning" align="center"><h2>Edit LoanType</h2></div>
+}
+@using (Html.BeginForm(FormMethod.Post, new { id = "AddLoanType" }))
+{
+    <div class="container-fluid bg-info mb-3" align="center">
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="form-label"> LoanType Id:</label>
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor( x=>x.LoanTypeId, new{@class="form-control"})
+                @Html.HiddenFor(x=>x.LoanTypeId, new{@class="form-control"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="form-label">Loan Name:</label>
+            </div>
+            <div class="col-2">
+                @Html.TextBoxFor(x=>x.LoanName, new {@class="form-control", required = "required" , maxlength = "15"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="form-label">Duration:</label>
+            </div>
+            <div class="col-2">
+                @Html.TextBoxFor(x=>x.Duration, new {@class="form-control", required = "required" , maxlength = "10"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <input type="submit" class="btn btn-outline-success" value="Submit" />
+            </div>
+        </div>
+    </div>
+}

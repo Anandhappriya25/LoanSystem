@@ -1,0 +1,66 @@
+﻿@using LoanSystem.Models
+@model LoanDetailDTO
+
+
+
+@if (Model.LoanId == 0)
+{
+    <div class="text-primary" align="center"><h2>Add Loan</h2> </div>
+}
+else
+{
+    <div class="text-warning" align="center"><h2>Edit Loan</h2></div>
+}
+@using (Html.BeginForm(FormMethod.Post, new { id = "AddLoan" }))
+{
+    <div class="container-fluid bg-info mb-3" align="center">
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="form-label"> Loan Id:</label>
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor( x=>x.LoanId, new{@class="form-control"})
+                @Html.HiddenFor(x=>x.LoanId, new{@class="form-control"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="required">LoanType Name:</label>
+            </div>
+            <div class="col-2">
+                @Html.DropDownListFor(x => x.LoanTypeId,Model.LoanTypes , new {@class="form-control"/*, required = "required" , maxlength = "15"*/})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+
+            <div class="col-2">
+                <label class="required">Customer Name:</label>
+            </div>
+            <div class="col-2">
+                @Html.DropDownListFor(x=>x.CustomerId,Model.Customers , new {@class="form-control"/*, required = "required" , maxlength = "10"*/})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="required">Date Of Sanction:</label>
+            </div>
+            <div class="col-2">
+                @*@Html.TextBoxFor(m => m.DateOfSanction, new { @Value = Model.DateOfSanction.ToString("dd-MMM-yyyy") })*@
+                @Html.TextBoxFor(x=>x.DateOfSanction, new {@class="form-control",required = "required" , type="datetime-local"/*, maxlength = "20"*/})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <label class="required">Loan Amount:</label>
+            </div>
+            <div class="col-2">
+                @Html.TextBoxFor(x=>x.LoanAmount, new {@class="form-control",required = "required" , maxlength = "12"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-2">
+                <input type="submit" class="btn btn-outline-success" value="Submit" />
+            </div>
+        </div>
+    </div>
+}
