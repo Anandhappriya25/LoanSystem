@@ -34,14 +34,15 @@ namespace LoanSystem.Repository
                         where loans.LoanId == id
                         select new LoanDetailDTO()
                         {
+                            LoanId = loanDetail.LoanId,
                             CustomerName = customer.CustomerName,
                             LoanName = loanType.LoanName,
                             PaidAmount = loanDetail.PaidAmount,
                             BalanceAmount = loanDetail.BalanceAmount,
                             BalanceDuration = loanDetail.BalanceDuration,
                             LoanAmount = _loan.LoanAmount,
-                            DateOfSanction = _loan.DateOfSanction
-
+                            DateOfSanction = _loan.DateOfSanction,
+                            TotalPaidAmount = loanDetail.TotalPaidAmount
                         }).ToList();
             return loan;
 

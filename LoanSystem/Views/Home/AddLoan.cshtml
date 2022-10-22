@@ -13,8 +13,10 @@ else
 }
 @using (Html.BeginForm(FormMethod.Post, new { id = "AddLoan" }))
 {
-    <div class="container-fluid bg-info mb-3" align="center">
-        <div class="mb-3 row justify-content-center">
+    <div class="container border rounded bg-light text-dark w-50 pt-2">
+
+        @Html.HiddenFor(x=>x.LoanId, new{@class="form-control"})
+        @*<div class="mb-3 row justify-content-center">
             <div class="col-2">
                 <label class="form-label"> Loan Id:</label>
             </div>
@@ -22,12 +24,12 @@ else
                 @Html.DisplayFor( x=>x.LoanId, new{@class="form-control"})
                 @Html.HiddenFor(x=>x.LoanId, new{@class="form-control"})
             </div>
-        </div>
+        </div>*@
         <div class="mb-3 row justify-content-center">
             <div class="col-2">
                 <label class="required">LoanType Name:</label>
             </div>
-            <div class="col-2">
+            <div class="col-5">
                 @Html.DropDownListFor(x => x.LoanTypeId,Model.LoanTypes , new {@class="form-control"/*, required = "required" , maxlength = "15"*/})
             </div>
         </div>
@@ -36,7 +38,7 @@ else
             <div class="col-2">
                 <label class="required">Customer Name:</label>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 @Html.DropDownListFor(x=>x.CustomerId,Model.Customers , new {@class="form-control"/*, required = "required" , maxlength = "10"*/})
             </div>
         </div>
@@ -44,7 +46,7 @@ else
             <div class="col-2">
                 <label class="required">Date Of Sanction:</label>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 @*@Html.TextBoxFor(m => m.DateOfSanction, new { @Value = Model.DateOfSanction.ToString("dd-MMM-yyyy") })*@
                 @Html.TextBoxFor(x=>x.DateOfSanction, new {@class="form-control",required = "required" , type="datetime-local"/*, maxlength = "20"*/})
             </div>
@@ -53,12 +55,12 @@ else
             <div class="col-2">
                 <label class="required">Loan Amount:</label>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 @Html.TextBoxFor(x=>x.LoanAmount, new {@class="form-control",required = "required" , maxlength = "12"})
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
-            <div class="col-2">
+            <div class="col-3">
                 <input type="submit" class="btn btn-outline-success" value="Submit" />
             </div>
         </div>

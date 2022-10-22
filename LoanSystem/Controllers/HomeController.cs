@@ -115,12 +115,12 @@ namespace LoanSystem.Controllers
             LoanDetailDTO details = new LoanDetailDTO();
             details.Customers = _customerRepository.GetAll().Select(a => new SelectListItem
             {
-                Text = a.CustomerName ,
+                Text = a.CustomerName + "(" + a.CustomerId + ")" ,
                 Value = a.CustomerId.ToString()
             }).ToList();
             details.LoanTypes = _loanTypeRepository.GetAll().Select(a => new SelectListItem
             {
-                Text = a.LoanName,
+                Text = a.LoanName + "(" + a.LoanTypeId + ")",
                 Value = a.LoanTypeId.ToString()
             }).ToList();
             return View(details);
@@ -158,8 +158,19 @@ namespace LoanSystem.Controllers
         [HttpGet]
         public IActionResult EditLoan(int id)
         {
-            var loanType = _loanRepository.GetLoanById(id);
-            return View("AddLoan", loanType);
+            LoanDetailDTO details = _loanRepository.GetLoanById(id);
+            details.Customers = _customerRepository.GetAll().Select(a => new SelectListItem
+            {
+                Text = a.CustomerName,
+                Value = a.CustomerId.ToString()
+            }).ToList();
+            details.LoanTypes = _loanTypeRepository.GetAll().Select(a => new SelectListItem
+            {
+                Text = a.LoanName,
+                Value = a.LoanTypeId.ToString()
+            }).ToList();
+            //details.DateOfSanction = 
+            return View("AddLoan", details);
         }
 
 
@@ -203,7 +214,7 @@ namespace LoanSystem.Controllers
 
         public IActionResult GetLoadDetailsById(int id)
         {
-            var loanDetail = _loanRepository.GetLoanById(id);
+            var loanDetail = _loanDetailRepository.GetLoanandCustomerDetails(id);
             return Json(loanDetail);
         }
 

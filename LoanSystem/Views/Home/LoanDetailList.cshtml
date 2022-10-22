@@ -4,13 +4,14 @@
 <table class="table table-striped table-hover" id="dataTable">
     <thead style="background-color: lightcyan;">
         <tr>
-                <th>LoanDetails Id</th>
+                <th>LoanDetailsId</th>
                 <th>LoanId</th>
                 <th>Paid Amount</th>
                 <th>Balance Amount</th>
                 <th>Balance Duration</th>
                 <th>Total PaidAmount</th>
                 <th>Actions</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -24,7 +25,9 @@
                 <td>@loanDetails.BalanceDuration</td>
                 <td>@loanDetails.TotalPaidAmount</td>
                 <td>
-                    <a href="/Home/EditPayedLoanDetail/@loanDetails.LoanDetailsId" class="btn btn-primary">Edit</a>
+                    <a href="/Home/EditPayedLoanDetail/@loanDetails.LoanDetailsId" class="btn btn-primary">Edit</a>                    
+                </td>
+                <td>
                     <a href="#" class="btn btn-info"> @(loanDetails.BalanceAmount == 0 ? "Loan Completed" : "Loan Pending") </a>
                 </td>
             </tr>

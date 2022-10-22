@@ -37,7 +37,7 @@ namespace LoanSystem.Controllers
             }
             return Ok(customer);
         }
-
+        
         [HttpGet("GetByName/{name}")]
         public IActionResult GetByName(string name)
         {

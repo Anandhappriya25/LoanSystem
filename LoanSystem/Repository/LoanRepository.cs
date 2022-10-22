@@ -18,9 +18,19 @@ namespace LoanSystem.Repository
         {
             return _loanDbContext.Loan.ToList();
         }
-        public Loan GetLoanById(int id)
+        public LoanDetailDTO GetLoanById(int id)
         {
-            return _loanDbContext.Loan.Find(id);
+            LoanDetailDTO loanDetail = new LoanDetailDTO();
+            var loan =  _loanDbContext.Loan.Find(id);
+            if(loan != null)
+            {
+                loanDetail.LoanId = loan.LoanId;
+                loanDetail.LoanAmount = loan.LoanAmount;
+                loanDetail.CustomerId = loan.CustomerId;
+                loanDetail.LoanTypeId = loan.LoanTypeId;
+                loanDetail.DateOfSanction = loan.DateOfSanction;
+            }
+            return loanDetail;
         }
 
         public Messages AddLoan(LoanDetailDTO loanDetail)
@@ -48,7 +58,7 @@ namespace LoanSystem.Repository
                 message.Message = "CustomerId not exists";
                 return message;
             }
-            var _loan = _loanDbContext.Loan.Find(loan.CustomerId);
+            var _loan = _loanDbContext.LoanDetails.Find(loanDetail.CustomerId);
             if (_loan == null)
             {
                 _loanDbContext.Add(loan);
