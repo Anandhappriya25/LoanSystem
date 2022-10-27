@@ -7,12 +7,8 @@
             data: $("#AddLoanType").serialize(),
             dataType: 'json',
             success: function (response) {
-                if (response.message = true) {
-                    alert("LoanType added");
-                    setTimeout(function () { window.location = '/Home/LoanTypeList'; }, 1000);
-                }
-                else {
-                    alert(response.message);
+                alert(response.message);
+                if (response.success == true) {
                     setTimeout(function () { window.location = '/Home/LoanTypeList'; }, 1000);
                 }
             },

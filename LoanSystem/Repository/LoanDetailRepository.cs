@@ -56,7 +56,8 @@ namespace LoanSystem.Repository
             var loan = _loanDbContext.Loan.Find(loanDetails.LoanId);
             if (loan == null)
             {
-                message.Message = " Loan is not there";
+                message.Message = " Customer not taken any loan in this id";
+                return message;
             }
             var payExists = _loanDbContext.LoanDetails.Where(x => x.LoanId == loanDetails.LoanId).ToList();
             var lastPay = payExists.LastOrDefault(x => x.LoanId == loan.LoanId);
@@ -86,7 +87,7 @@ namespace LoanSystem.Repository
                 loanDetails.BalanceDuration = lastPay.BalanceDuration - 1;
                 _loanDbContext.Add(loanDetails);
                 _loanDbContext.SaveChanges();
-                message.Message = "PayedLaon updated";
+                message.Message = "Loan Payed for this customer";
             }
             return message;
         }

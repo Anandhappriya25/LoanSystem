@@ -7,12 +7,8 @@
             data: $("#PayLoan").serialize(),
             dataType: 'json',
             success: function (response) {
+                alert(response.message);
                 if (response.success == true) {
-                    alert("Loan payed");
-                    setTimeout(function () { window.location = '/Home/LoanDetailList'; }, 1000);
-                }
-                else {
-                    alert(response.message);
                     setTimeout(function () { window.location = '/Home/LoanDetailList'; }, 1000);
                 }
             },
@@ -49,25 +45,26 @@ function getDetails() {
             success: function (response) {
                 console.log(response);
                 var table = $('#loanList tbody');
-                table.html('');
+                var html = "";
                 if (response.length != 0) {
-
                     $.each(response, function (i, v) {
-                        table.append('<tr>').append('<td">' + v.loanId + '</td>')
-                            .append('<td>' + v.loanName + '</td>')
-                            .append('<td>' + v.customerName + '</td>')
-                            .append('<td>' + v.dateOfSanction + '</td>')
-                            .append('<td>' + v.loanAmount + '</td>')
-                            .append('<td>' + v.paidAmount + '</td>')
-                            .append('<td>' + v.balanceAmount + '</td>')
-                            .append('<td>' + v.balanceAmount == 0 ? "Loan Completed" : "Loan Pending" + '</td>')
-                            .append('</tr>');
+                        html += '<tr><td class="text-center">' + v.loanId + '</td>';
+                        html += '<td class="text-center">' + v.loanName + '</td>';
+                        html += '<td class="text-center">' + v.customerName + '</td>';
+                        html += '<td class="text-center">' + v.dateOfSanction + '</td>';
+                        html += '<td class="text-center">' + v.loanAmount + '</td>';
+                        html += '<td class="text-center">' + v.paidAmount + '</td>';
+                        html += '<td class="text-center">' + v.balanceAmount + '</td>';
+                        var status = parseInt(v.balanceAmount) == 0 ? "Loan Completed" : "Loan Pending";
+                        var cls = parseInt(v.balanceAmount) == 0 ? "btn-primary" : "btn-warning";
+                        html += '<td class="text-center"><button class="btn '+ cls +'">' + status + '</button></td>';
+                        html += '</tr>';
                     });
+                    table.html(html);
                     $('#loanList').show();
                 }
                 else {
-                    table.append('<tr>').append('<td colspan="7"> No Data to Display </td>')
-                        .append('</tr>');
+                    alert("No data to display");
                 }
             },
             error: function () {

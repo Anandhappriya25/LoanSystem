@@ -65,7 +65,6 @@ namespace LoanSystem.Repository
             {
                 message.Message = "Can't modify Customer because they already applied loan";
                 return message;
-                ;
             }
 
         }

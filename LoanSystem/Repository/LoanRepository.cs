@@ -86,18 +86,18 @@ namespace LoanSystem.Repository
             Messages message = new Messages();
             message.Success = false;
             var _loan = _loanDbContext.Loan.Where(x => x.LoanId == loan.LoanId).FirstOrDefault();
-            if (_loan != null)
+            var detail = _loanDbContext.LoanDetails.Where(x => x.LoanId == loan.LoanId).FirstOrDefault();
+            if (detail == null)
             {
                 _loan.DateOfSanction = loan.DateOfSanction;
                 _loan.LoanAmount = loan.LoanAmount;
                 _loanDbContext.SaveChanges();
-                message.Success = true;
                 message.Message = "Loan updated";
                 return message;
             }
             else
             {
-                message.Message = "Not Updated";
+                message.Message = "Loan can't be updated because customer payed loan amount";
             }
             var loanValue = _loanDbContext.Loan.FirstOrDefault(x => x.LoanId == loan.LoanId);
             return message;
@@ -134,6 +134,7 @@ namespace LoanSystem.Repository
                         }).ToList();
             return loan;
         }
+
         //public IEnumerable<DetailsDTO> LoanListDTO()
         //{
         //    var loan = (from loans in _loanDbContext.Loan

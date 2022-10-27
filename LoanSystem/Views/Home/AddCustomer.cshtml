@@ -17,43 +17,36 @@ else
 </style>
 @using (Html.BeginForm(FormMethod.Post, new { id = "AddCustomer" }))
 {
-    <div class="container bg-info w-50 rounded pt-4">
+    <div class="container border rounded bg-light text-dark w-50 pt-2">
         @Html.HiddenFor(x=>x.CustomerId, new{@class="form-control"})
 
-           @* <div class="col-2">
-                <label class="form-label">Customer Id:</label>
-            </div>
-            <div class="col-2">
-                @Html.DisplayFor( x=>x.CustomerId, new{@class="form-control"})
-                @Html.HiddenFor(x=>x.CustomerId, new{@class="form-control"})
-            </div>*@
         <div class="mb-3 row justify-content-center">
-            <div class="col-2">
-                <label class="required"> Customer Name:</label>
+            <div class="col-3">
+                <label class="required">Customer Name:</label>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 @Html.TextBoxFor(x=>x.CustomerName, new {@class="form-control", type="string", required = "required", maxlength = "15"})
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
-            <div class="col-2">
+            <div class="col-3">
                 <label class="required">Mobile Number:</label>
              </div>
-             <div class="col-2">
-                @Html.TextBoxFor(x=>x.MobileNumber, new {@class="form-control", required = "required",type="number",min="6000000000",max="9999999999", maxlength = "10"})
+             <div class="col-4">
+                @Html.TextBoxFor(x=>x.MobileNumber, new {@class="form-control", required = "required",type="number", maxlength = "10",min="6000000000",max="9999999999"})
              </div>
         </div>
         <div class="mb-3 row justify-content-center">
-             <div class="col-2">
+             <div class="col-3">
                  <label class="required">Aadhar Number:</label>
              </div>
-             <div class="col-2">
-                @Html.TextBoxFor(x=>x.AadharNumber, new {@class="form-control",required = "required", type="number",min="600000000000" ,maxlength = "12"})
+             <div class="col-4">
+                @Html.TextBoxFor(x=>x.AadharNumber, new {@class="form-control",required = "required", type="number",maxlength = "12",min="600000000000" })
              </div>
         </div>
         <div class="mb-3 row justify-content-center">
-             <div class="col-2">
-                 <input type="submit" class="btn btn-outline-success" value="Submit" />
+             <div class="col-3">
+                 <input type="submit" class="btn btn-success" value="Submit" />
              </div>
         </div>
     </div>

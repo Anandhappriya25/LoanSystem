@@ -2,7 +2,17 @@
 @model List<LoanDetailDTO>
 
 
-<table class="table table-striped table-hover" id="dataTable">
+
+<div style="float:right; background-color:orange; font-size:16px;">
+    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AddLoan">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg> AddLoan
+    </a>
+</div>
+
+<h2 style="font-weight"> Loan List </h2>
+<table class="table table-hover" id="dataTable">
     <thead style="background-color: lightcyan;">
             <tr>
                 <th class="text-center">LoanId</th>
@@ -10,8 +20,8 @@
                 <th class="text-center">Customer Name</th>
                 <th class="text-center">Date Of Sanction</th>
                 <th class="text-center">Loan Amount</th>
-                <th class="text-center">Actions</th>
                 <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
             </tr>
     </thead>
     <tbody>
@@ -22,12 +32,12 @@
                  <td class="text-center">@loan.LoanName</td>
                  <td class="text-center">@loan.CustomerName</td>
                  <td class="text-center">@loan.DateOfSanction</td>
-                 <td class="text-center">@loan.LoanAmount</td>
+                <td class="text-center">@loan.LoanAmount</td>
+                <td>
+                    <a href="#" class="btn btn-info"> @(loan.LoanAmount == loan.TotalPaidAmount ? "Loan Completed" : "Loan Pending") </a>
+                </td>
                  <td class="text-center">
                     <a href="/Home/EditLoan/@loan.LoanId" class="btn btn-primary">Edit</a>
-                 </td>
-                 <td>
-                     <a href="#" class="btn btn-info"> @(loan.LoanAmount == loan.TotalPaidAmount? "Loan Completed" : "Loan Pending") </a>
                  </td>
             </tr>
         }

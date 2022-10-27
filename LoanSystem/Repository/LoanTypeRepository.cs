@@ -1,4 +1,5 @@
-﻿using LoanSystem.Models;
+﻿using Castle.Core.Resource;
+using LoanSystem.Models;
 
 namespace LoanSystem.Repository
 {
@@ -48,18 +49,18 @@ namespace LoanSystem.Repository
             Messages message = new Messages();
             message.Success = false;
             var _loanType = _loanDbContext.LoanType.Where(x => x.LoanTypeId == loanType.LoanTypeId).FirstOrDefault();
-            if (_loanType != null)
+            var loan = _loanDbContext.Loan.Where(x => x.LoanTypeId == loanType.LoanTypeId).FirstOrDefault();
+            if (loan == null)
             {
                 _loanType.LoanName = loanType.LoanName;
                 _loanType.Duration = loanType.Duration;
                 _loanDbContext.SaveChanges();
-                message.Success = true;
                 message.Message = "LoanType updated successfully";
                 return message;
             }
             else
             {
-                message.Message = "LoanType not updated ";
+                message.Message = "Can't modify loantype because customer used to apply the loan";
                 return message;
             }
 

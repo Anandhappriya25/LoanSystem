@@ -1,34 +1,44 @@
 ﻿@using LoanSystem.Models
 @model List<LoanDetails>
 
-<table class="table table-striped table-hover" id="dataTable">
+
+<div style="float:right; background-color:lightyellow; font-size:16px;">
+    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PayLoan">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z" />
+            <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
+        </svg>PayLoan
+    </a>
+</div>
+<h2 style="font-weight"> LoanDetail List </h2>
+<table class="table table-hover" id="dataTable">
     <thead style="background-color: lightcyan;">
         <tr>
-                <th>LoanDetailsId</th>
-                <th>LoanId</th>
-                <th>Paid Amount</th>
-                <th>Balance Amount</th>
-                <th>Balance Duration</th>
-                <th>Total PaidAmount</th>
-                <th>Actions</th>
-                <th>Status</th>
+                <th class="text-center">LoanDetailsId</th>
+                <th class="text-center">LoanId</th>
+                <th class="text-center">Paid Amount</th>
+                <th class="text-center">Balance Amount</th>
+                <th class="text-center">Balance Duration</th>
+                <th class="text-center">Total PaidAmount</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
         @foreach (LoanDetails loanDetails in Model)
         {
             <tr>
-                <td>@loanDetails.LoanDetailsId</td>
-                <td>@loanDetails.LoanId</td>
-                <td>@loanDetails.PaidAmount</td>
-                <td>@loanDetails.BalanceAmount</td>
-                <td>@loanDetails.BalanceDuration</td>
-                <td>@loanDetails.TotalPaidAmount</td>
-                <td>
-                    <a href="/Home/EditPayedLoanDetail/@loanDetails.LoanDetailsId" class="btn btn-primary">Edit</a>                    
-                </td>
-                <td>
+                <td class="text-center">@loanDetails.LoanDetailsId</td>
+                <td class="text-center">@loanDetails.LoanId</td>
+                <td class="text-center">@loanDetails.PaidAmount</td>
+                <td class="text-center">@loanDetails.BalanceAmount</td>
+                <td class="text-center">@loanDetails.BalanceDuration</td>
+                <td class="text-center">@loanDetails.TotalPaidAmount</td>
+                <td class="text-center">
                     <a href="#" class="btn btn-info"> @(loanDetails.BalanceAmount == 0 ? "Loan Completed" : "Loan Pending") </a>
+                </td>
+                <td class="text-center">
+                    <a href="/Home/EditPayedLoanDetail/@loanDetails.LoanDetailsId" class="btn btn-primary">Edit</a>                    
                 </td>
             </tr>
         }

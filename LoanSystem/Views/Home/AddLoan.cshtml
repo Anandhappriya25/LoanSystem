@@ -5,37 +5,34 @@
 
 @if (Model.LoanId == 0)
 {
-    <div class="text-primary" align="center"><h2>Add Loan</h2> </div>
+    <div style="font-weight" align="center"><h2>Add Loan</h2> </div>
 }
 else
 {
-    <div class="text-warning" align="center"><h2>Edit Loan</h2></div>
+    <div style="font-weight" align="center"><h2>Edit Loan</h2></div>
 }
+<style>
+    .required:after {
+        content: " *";
+        color: red;
+    }
+</style>
 @using (Html.BeginForm(FormMethod.Post, new { id = "AddLoan" }))
 {
     <div class="container border rounded bg-light text-dark w-50 pt-2">
 
         @Html.HiddenFor(x=>x.LoanId, new{@class="form-control"})
-        @*<div class="mb-3 row justify-content-center">
-            <div class="col-2">
-                <label class="form-label"> Loan Id:</label>
-            </div>
-            <div class="col-2">
-                @Html.DisplayFor( x=>x.LoanId, new{@class="form-control"})
-                @Html.HiddenFor(x=>x.LoanId, new{@class="form-control"})
-            </div>
-        </div>*@
         <div class="mb-3 row justify-content-center">
-            <div class="col-2">
+            <div class="col-3">
                 <label class="required">LoanType Name:</label>
             </div>
-            <div class="col-5">
+            <div class="col-4">
                 @Html.DropDownListFor(x => x.LoanTypeId,Model.LoanTypes , new {@class="form-control"/*, required = "required" , maxlength = "15"*/})
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
 
-            <div class="col-2">
+            <div class="col-3">
                 <label class="required">Customer Name:</label>
             </div>
             <div class="col-4">
@@ -43,7 +40,7 @@ else
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
-            <div class="col-2">
+            <div class="col-3">
                 <label class="required">Date Of Sanction:</label>
             </div>
             <div class="col-4">
@@ -52,7 +49,7 @@ else
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
-            <div class="col-2">
+            <div class="col-3">
                 <label class="required">Loan Amount:</label>
             </div>
             <div class="col-4">

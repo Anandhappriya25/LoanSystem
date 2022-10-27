@@ -7,12 +7,8 @@
             data: $("#AddCustomer").serialize(),
             dataType: 'json',
             success: function (response) {
+                alert(response.message);
                 if (response.success == true) {
-                    alert("Customer added successfully");
-                    setTimeout(function () { window.location = '/Home/CustomerList'; }, 1000);
-                }
-                else {
-                    alert(response.message);
                     setTimeout(function () { window.location = '/Home/CustomerList'; }, 1000);
                 }
             },
