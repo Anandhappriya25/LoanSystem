@@ -1,7 +1,7 @@
 ﻿@using LoanSystem.Models
 @model List<CustomerDTO>
 
-<div style="float:right; background-color:orange; font-size:16px;">
+@*<div style="float:right; background-color:orange; font-size:16px;">
     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AddCustomer">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
             <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
@@ -9,7 +9,7 @@
             <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
         </svg> CreateCustomer
     </a>
-</div>
+</div>*@
 
 <h2 style="font-weight">  Customer List </h2>
     <table class="table table-hover"  id="dataTable">
@@ -20,7 +20,6 @@
                 <th class="text-center">Mobile Number</th>
                 <th class="text-center">Aadhar Number</th>
                 <th class="text-center">Email Id</th>
-                @*<th class="text-center">Password</th>*@
                 <th class="text-center">Role Name</th>
                 <th class="text-center" data-orderable="false">Actions</th>
             </tr>
@@ -34,7 +33,6 @@
                 <td class="text-center">@customer.MobileNumber</td>
                 <td class="text-center">@customer.AadharNumber</td>
                 <td class="text-center">@customer.EmailId</td>
-                @*<td class="text-center">@customer.Password</td>*@
                 <td class="text-center">@customer.RoleName</td>
                 <td class="text-center">
                     <a href="/Home/Update/@customer.CustomerId" class="btn btn-primary">

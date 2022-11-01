@@ -12,7 +12,7 @@ namespace LoanSystem.Repository
         Messages AddCustomer(CustomerDTO customer);
         Messages UpdateCustomer(CustomerDTO customer);
         Messages DeleteCustomer(int id);
-        LoginResultDTO GetLoginDetail(string emailId, string password);
+        CustomerDTO GetLoginDetail(string emailId, string password);
         IEnumerable<CustomerDTO> CustomerList();
         List<Role> GetAllRole();
         Role GetRoleById(int id);        

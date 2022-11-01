@@ -48,7 +48,7 @@ namespace LoanSystem.Controllers
 
                 {
                     new Claim(ClaimTypes.NameIdentifier , user.CustomerId.ToString()),
-                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Name, user.EmailId),
                     new Claim(ClaimTypes.Role, user.RoleName)
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, "Login");
@@ -65,16 +65,20 @@ namespace LoanSystem.Controllers
                 }
             }
             else
+            {
+                ViewBag.Message = "Invalid Credential";
                 return View(login);
+            }
         }
 
 
-        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Index");
         }
+        [Authorize]
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult CustomerList()
         {
             var customerList = _customerRepository.CustomerList();
@@ -107,18 +111,19 @@ namespace LoanSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult Update(int id)
         {
             var customer = _customerRepository.GetById(id);
             return View("AddCustomer", customer);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteCustomer(int id)
         {
             var deleteCustomer = _customerRepository.DeleteCustomer(id);
             return Json(deleteCustomer);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult LoanTypeList()
         {
             var loanTypeList = _loanTypeRepository.GetAll();
@@ -144,18 +149,21 @@ namespace LoanSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var loanType = _loanTypeRepository.GetById(id);
             return View("AddLoanType", loanType);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteLoanType(int id)
         {
             var deleteLoanType = _loanTypeRepository.DeleteLoanType(id);
             return Json(deleteLoanType);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult LoanList()
         {
             var loanList = _loanRepository.LoanList();
@@ -196,6 +204,7 @@ namespace LoanSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditLoan(int id)
         {
             LoanDetailDTO details = _loanRepository.GetLoanById(id);
@@ -215,6 +224,7 @@ namespace LoanSystem.Controllers
 
 
 
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult LoanDetailList()
         {
             var loanDetailList = _loanDetailRepository.GetAll();
@@ -240,19 +250,22 @@ namespace LoanSystem.Controllers
         }
 
         [HttpGet]
+
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult EditPayedLoanDetail(int id)
         {
             var loanDetails = _loanDetailRepository.GetById(id);
             return View("PayLoan", loanDetails);
         }
 
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult CloseLoan(int id)
         {
             var closeLoanDetail = _loanDetailRepository.LoanClosed(id);
             return Json(closeLoanDetail);
         }
 
-        public IActionResult GetLoadDetailsById(int id)
+        public IActionResult GetLoanDetailsById(int id)
         {
             var loanDetail = _loanDetailRepository.GetLoanandCustomerDetails(id);
             return Json(loanDetail);

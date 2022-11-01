@@ -40,9 +40,14 @@ namespace LoanSystem.Migrations
 
                     b.Property<string>("EmailId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -51,7 +56,7 @@ namespace LoanSystem.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("LoanSystem.Models.Loan", b =>
@@ -76,7 +81,7 @@ namespace LoanSystem.Migrations
 
                     b.HasKey("LoanId");
 
-                    b.ToTable("Loan");
+                    b.ToTable("Loan", (string)null);
                 });
 
             modelBuilder.Entity("LoanSystem.Models.LoanDetails", b =>
@@ -104,7 +109,7 @@ namespace LoanSystem.Migrations
 
                     b.HasKey("LoanDetailsId");
 
-                    b.ToTable("LoanDetails");
+                    b.ToTable("LoanDetails", (string)null);
                 });
 
             modelBuilder.Entity("LoanSystem.Models.LoanType", b =>
@@ -124,7 +129,7 @@ namespace LoanSystem.Migrations
 
                     b.HasKey("LoanTypeId");
 
-                    b.ToTable("LoanType");
+                    b.ToTable("LoanType", (string)null);
                 });
 
             modelBuilder.Entity("LoanSystem.Models.Role", b =>
@@ -141,7 +146,7 @@ namespace LoanSystem.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 #pragma warning restore 612, 618
         }

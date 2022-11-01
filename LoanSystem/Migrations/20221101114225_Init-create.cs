@@ -18,7 +18,8 @@ namespace LoanSystem.Migrations
                     CustomerName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AadharNumber = table.Column<long>(type: "bigint", nullable: false),
-                    EmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -79,8 +80,7 @@ namespace LoanSystem.Migrations
                 {
                     RoleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

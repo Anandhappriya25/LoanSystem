@@ -1,39 +1,56 @@
-﻿
-@model LoanSystem.Models.LoginModel
+﻿@model LoanSystem.Models.LoginModel
 
-<h2>Login</h2>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @if (!string.IsNullOrEmpty(ViewBag.Message))
-            {
-                <span class="text-danger">
-                    @ViewBag.Message
-                </span>
-            }
-            @Html.HiddenFor(x => x.ReturnUrl)
-            <div class="form-group">
-                <label asp-for="EmailId" class="control-label"></label>
-                <input asp-for="EmailId" class="form-control" />
-                <span asp-validation-for="EmailId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="RememberLogin" /> @Html.DisplayNameFor(model => model.RememberLogin)
-                    </label>
-                </div>
-            </div>*@
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-default" />
-            </div>
-        </form>
+<h2 class="text-center">Login Page</h2>
+
+
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <div style="float:right; font-size:30px;">
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <span class="text-danger">
+                @ViewBag.Message
+            </span>
+        }
     </div>
-</div>  
+    <div class="container border rounded bg-light text-dark w-50 pt-2">
+        
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label required">Email Id</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(m => m.EmailId , new {@class="form-control", required = "required" , type= "email",maxlength="20"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+                <div class="col-3">
+                    <label class="form-label required">Password</label>
+                </div>
+                <div class="col-4">
+                    @Html.TextBoxFor(m => m.Password , new {@class="form-control", required = "required" ,type="password",minlength = "5",maxlength = "10"})
+                </div>
+        </div>
+        <div class="mb-4 row justify-content-center">
+            <div class="col-5">
+                <a class="btn btn-warning" href="~/Home/AddCustomer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
+                        <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+                    </svg>Create Customer
+                </a>
+
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-outline-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>Log In
+                </button>
+            </div>
+        </div>
+    </div>
+}

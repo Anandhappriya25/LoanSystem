@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanSystem.Migrations
 {
     [DbContext(typeof(LoanDbContext))]
-    [Migration("20221031122818_Init-create")]
+    [Migration("20221101114225_Init-create")]
     partial class Initcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,14 @@ namespace LoanSystem.Migrations
 
                     b.Property<string>("EmailId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -136,9 +141,6 @@ namespace LoanSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"), 1L, 1);
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<string>("RoleName")
                         .IsRequired()

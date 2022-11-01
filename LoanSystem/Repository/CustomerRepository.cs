@@ -20,6 +20,7 @@ namespace LoanSystem.Repository
             _customer.MobileNumber = customers.MobileNumber;
             _customer.AadharNumber = customers.AadharNumber;
             _customer.EmailId = customers.EmailId;
+            _customer.Password = customers.Password;
             _customer.RoleId = customers.RoleId;
             Messages message = new Messages();
             var customer = _loanDbContext.Customer.Where(x => x.MobileNumber == customers.MobileNumber || x.AadharNumber == customers.AadharNumber).SingleOrDefault();
@@ -102,18 +103,33 @@ namespace LoanSystem.Repository
             return _loanDbContext.Customer.FirstOrDefault(x => x.MobileNumber == x.MobileNumber);
         }
 
-        public LoginResultDTO GetLoginDetail(string emailId, string password)
+        //public LoginResultDTO GetLoginDetail(string emailId, string password)
+        //{
+        //    var customers = (from customer in _loanDbContext.Customer
+        //                     join role in _loanDbContext.Roles on customer.RoleId equals role.RoleId
+        //                     where customer.EmailId == emailId && customer.Password == password
+        //                     select new LoginResultDTO()
+        //                     {
+        //                         CustomerId = customer.CustomerId,
+        //                         MobileNumber = customer.MobileNumber,
+        //                         RoleName = role.RoleName,
+        //                         EmailId = customer.EmailId
+        //                     }).FirstOrDefault();
+        //    return customers;
+        //}
+        public CustomerDTO GetLoginDetail(string emailId, string password)
         {
             var customers = (from customer in _loanDbContext.Customer
                              join role in _loanDbContext.Roles on customer.RoleId equals role.RoleId
-                             where /*customer.Password == password &&*/ customer.EmailId == emailId
-                             select new LoginResultDTO()
+                             where customer.EmailId == emailId && customer.Password == password
+                             select new CustomerDTO()
                              {
                                  CustomerId = customer.CustomerId,
                                  MobileNumber = customer.MobileNumber,
                                  RoleName = role.RoleName,
-                                 Email = customer.EmailId
+                                 EmailId = customer.EmailId
                              }).FirstOrDefault();
+
             return customers;
         }
 
