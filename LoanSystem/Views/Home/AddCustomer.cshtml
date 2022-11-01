@@ -1,7 +1,7 @@
 ﻿@using LoanSystem.Models
-@model Customer
+@model CustomerDTO
 
-@if (Model == null)
+@if (Model.CustomerId == 0)
 {
     <div class="text-primary" align="center"><h2>Create Customer</h2> </div>
 }
@@ -43,6 +43,30 @@ else
              <div class="col-4">
                 @Html.TextBoxFor(x=>x.AadharNumber, new {@class="form-control",required = "required", type="number",maxlength = "12",min="600000000000" })
              </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">Email Id:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.EmailId, new {@class="form-control",required = "required",type="email",placeHolder="enter your email here"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">Password:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.Password, new {@class="form-control",required = "required",type="password" })
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">Role Name:</label>
+            </div>
+            <div class="col-4">
+                @Html.DropDownListFor(x=>x.RoleId,Model.Roles, new {@class="form-control",required = "required" })
+            </div>
         </div>
         <div class="mb-3 row justify-content-center">
              <div class="col-3">

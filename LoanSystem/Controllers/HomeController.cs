@@ -1,9 +1,13 @@
 ﻿using LoanSystem.Models;
 using LoanSystem.Models.DTO;
 using LoanSystem.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LoanSystem.Controllers
 {
@@ -14,7 +18,6 @@ namespace LoanSystem.Controllers
         private readonly ILoanTypeRepository _loanTypeRepository;
         private readonly ILoanRepository _loanRepository;
         private readonly ILoanDetailRepository _loanDetailRepository;
-
         public HomeController(ILogger<HomeController> logger, ICustomerRepository customerRepository, ILoanTypeRepository loanTypeRepository, ILoanRepository loanRepository, ILoanDetailRepository loanDetailRepository)
         {
             _logger = logger;
@@ -24,25 +27,74 @@ namespace LoanSystem.Controllers
             _loanDetailRepository = loanDetailRepository;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
-
-        public IActionResult CustomerList()
-        {
-            var customerList = _customerRepository.GetAll();
-            return View(customerList);
-        }
-        public IActionResult AddCustomer()
+        public IActionResult Login()
         {
             return View();
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel login)
+        {
+            var user = _customerRepository.GetLoginDetail(login.EmailId, login.Password);
+            if (user != null)
+            {
+                var claims = new List<Claim>
+
+                {
+                    new Claim(ClaimTypes.NameIdentifier , user.CustomerId.ToString()),
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Role, user.RoleName)
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, "Login");
+
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                if (user.RoleName == "Admin")
+                {
+                    return Redirect(login.ReturnUrl == null ? "/Home/Index" : login.ReturnUrl);
+                }
+                else
+                {
+                    return Redirect(login.ReturnUrl == null ? "/Home/AddCustomer" : login.ReturnUrl);
+                }
+            }
+            else
+                return View(login);
+        }
+
 
         [HttpPost]
-        public IActionResult Save(Customer customer)
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+        public IActionResult CustomerList()
+        {
+            var customerList = _customerRepository.CustomerList();
+            return View(customerList);
+        }
+        
+        public IActionResult AddCustomer()
+        {
+            CustomerDTO role = new CustomerDTO();
+            role.Roles = _customerRepository.GetAllRole().Select(a => new SelectListItem
+            {
+                Text = a.RoleName,
+                Value = a.RoleId.ToString()
+            }).ToList();
+            role.Roles.Insert(0, new SelectListItem { Text = "Select Role", Value = ""});
+            return View(role);
+        }
+
+        [HttpPost]
+        public IActionResult Save(CustomerDTO customer)
         {
             if (customer.CustomerId > 0)
             {
@@ -118,29 +170,17 @@ namespace LoanSystem.Controllers
                 Text = a.CustomerName + "(" + a.CustomerId + ")" ,
                 Value = a.CustomerId.ToString()
             }).ToList();
+            details.Customers.Insert(0, new SelectListItem { Text = "Select Customer", Value = "" });
             details.LoanTypes = _loanTypeRepository.GetAll().Select(a => new SelectListItem
             {
                 Text = a.LoanName + "(" + a.LoanTypeId + ")",
                 Value = a.LoanTypeId.ToString()
             }).ToList();
+            details.LoanTypes.Insert(0, new SelectListItem { Text = "Select LoanType", Value = "" });
             return View(details);
         }
 
-        //public IActionResult LoanDetail()
-        //{
-        //    DetailsDTO details = new DetailsDTO();
-        //    details.Customers = _customerRepository.GetAll().Select(a => new SelectListItem
-        //    {
-        //        Text = a.CustomerName ,
-        //        Value = a.CustomerId.ToString()
-        //    }).ToList();
-        //    details.LoanTypes = _loanTypeRepository.GetAll().Select(a => new SelectListItem
-        //    {
-        //        Text = a.LoanName,
-        //        Value = a.LoanTypeId.ToString()
-        //    }).ToList();
-        //    return View(details);
-        //}
+        
 
         [HttpPost]
         public IActionResult SaveLoan(LoanDetailDTO loan)

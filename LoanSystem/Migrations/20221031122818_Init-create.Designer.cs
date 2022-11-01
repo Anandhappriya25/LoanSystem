@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanSystem.Migrations
 {
     [DbContext(typeof(LoanDbContext))]
-    [Migration("20221020034453_Init-Create")]
-    partial class InitCreate
+    [Migration("20221031122818_Init-create")]
+    partial class Initcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,9 +40,16 @@ namespace LoanSystem.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("EmailId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MobileNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("CustomerId");
 
@@ -120,6 +127,26 @@ namespace LoanSystem.Migrations
                     b.HasKey("LoanTypeId");
 
                     b.ToTable("LoanType");
+                });
+
+            modelBuilder.Entity("LoanSystem.Models.Role", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"), 1L, 1);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Roles");
                 });
 #pragma warning restore 612, 618
         }

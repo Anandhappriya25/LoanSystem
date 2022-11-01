@@ -44,8 +44,7 @@ else
                 <label class="required">Date Of Sanction:</label>
             </div>
             <div class="col-4">
-                @*@Html.TextBoxFor(m => m.DateOfSanction, new { @Value = Model.DateOfSanction.ToString("dd-MMM-yyyy") })*@
-                @Html.TextBoxFor(x=>x.DateOfSanction, new {@class="form-control",required = "required" , type="datetime-local"/*, maxlength = "20"*/})
+                 @Html.TextBoxFor(x=>x.DateOfSanction, new {@class="form-control",required = "required" , type="datetime-local"/*, maxlength = "20"*/})
             </div>
         </div>
         <div class="mb-3 row justify-content-center">

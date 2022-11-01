@@ -50,14 +50,14 @@ namespace LoanSystem.Controllers
         }
 
         [HttpPost("AddCustomer")]
-        public IActionResult AddCustomer(Customer customer)
+        public IActionResult AddCustomer(CustomerDTO customer)
         {
             var customers = _customerRepository.AddCustomer(customer);
             return Ok(customer);
         }
 
         [HttpPut("UpdateCustomer/{id}")]
-        public IActionResult UpdateCustomer(Customer customers)
+        public IActionResult UpdateCustomer(CustomerDTO customers)
         {
             var customer = _customerRepository.UpdateCustomer(customers);
             if (customer == null)

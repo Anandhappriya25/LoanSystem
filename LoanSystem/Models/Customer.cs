@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoanSystem.Models
 {
@@ -20,5 +21,15 @@ namespace LoanSystem.Models
         [RegularExpression("([0-9]{12})", ErrorMessage = "Aadhar Number must be 12 digits")]
         public long AadharNumber { get; set; }
 
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress]
+        public string EmailId { get; set; }
+
+        //[Required(ErrorMessage = "Password is required")]
+        //[DataType(DataType.Password)]
+        //public string Password { get; set; }
+
+        [ForeignKey("Role")]
+        public int RoleId { get; set; }
     }
 }

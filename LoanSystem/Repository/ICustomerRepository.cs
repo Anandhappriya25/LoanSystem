@@ -1,4 +1,5 @@
 ﻿using LoanSystem.Models;
+using System.Data;
 
 namespace LoanSystem.Repository
 {
@@ -8,8 +9,12 @@ namespace LoanSystem.Repository
         Customer GetById(int id);
         Customer GetByName(string name);
         Customer GetByMobileNumber(int mobileNumber); 
-        Messages AddCustomer(Customer customer);
-        Messages UpdateCustomer(Customer customer);
+        Messages AddCustomer(CustomerDTO customer);
+        Messages UpdateCustomer(CustomerDTO customer);
         Messages DeleteCustomer(int id);
+        LoginResultDTO GetLoginDetail(string emailId, string password);
+        IEnumerable<CustomerDTO> CustomerList();
+        List<Role> GetAllRole();
+        Role GetRoleById(int id);        
     }
 }

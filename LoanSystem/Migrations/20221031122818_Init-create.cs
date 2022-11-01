@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LoanSystem.Migrations
 {
-    public partial class InitCreate : Migration
+    public partial class Initcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,9 @@ namespace LoanSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AadharNumber = table.Column<long>(type: "bigint", nullable: false)
+                    AadharNumber = table.Column<long>(type: "bigint", nullable: false),
+                    EmailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,6 +72,20 @@ namespace LoanSystem.Migrations
                 {
                     table.PrimaryKey("PK_LoanType", x => x.LoanTypeId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.RoleId);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -85,6 +101,9 @@ namespace LoanSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "LoanType");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

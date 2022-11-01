@@ -32,4 +32,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LoanSystem\LoanSystem.csproj" />
+  </ItemGroup>
+
 </Project>

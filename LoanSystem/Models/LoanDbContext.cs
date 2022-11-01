@@ -15,6 +15,6 @@ namespace LoanSystem.Models
         public DbSet<Loan> Loan { get; set; }
         public DbSet<LoanDetails> LoanDetails { get; set; }
 
-
+        public DbSet<Role> Roles { get; set; }
     }
 }

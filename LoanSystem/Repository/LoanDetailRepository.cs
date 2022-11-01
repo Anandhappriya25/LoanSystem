@@ -13,7 +13,7 @@ namespace LoanSystem.Repository
 
         public List<LoanDetails> GetAll()
         {
-            return _loanDbContext.LoanDetails.ToList();
+            return _loanDbContext.LoanDetails.ToList(); 
         }
         public LoanDetails GetById(int id)
         {
