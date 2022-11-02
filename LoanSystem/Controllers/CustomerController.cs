@@ -49,6 +49,13 @@ namespace LoanSystem.Controllers
             return Ok(customer);
         }
 
+        //[HttpGet("GetByMobileNumber/{mobileNumber}")]
+        //public IActionResult GetByMobileNumber(int mobileNumber)
+        //{
+        //    var customer = _customerRepository.GetByMobileNumber(mobileNumber);
+        //    return Ok(customer);
+        //}
+
         [HttpPost("AddCustomer")]
         public IActionResult AddCustomer(CustomerDTO customer)
         {

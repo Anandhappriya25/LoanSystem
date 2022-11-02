@@ -135,26 +135,6 @@ namespace LoanSystem.Repository
             return loan;
         }
 
-        //public IEnumerable<DetailsDTO> LoanListDTO()
-        //{
-        //    var loan = (from loans in _loanDbContext.Loan
-        //                join _loan in _loanDbContext.Loan on loans.LoanId equals _loan.LoanId
-        //                join customer in _loanDbContext.Customer on loans.CustomerId equals customer.CustomerId
-        //                join loanType in _loanDbContext.LoanType on loans.LoanTypeId equals loanType.LoanTypeId
-        //                //join loanDetail in _loanDbContext.LoanDetails on loans.LoanId equals loanDetail.LoanId
-        //                //where loans.LoanId == id
-        //                select new LoanDetailDTO()
-        //                {
-        //                    LoanId = _loan.LoanId,
-        //                    CustomerName = customer.CustomerName,
-        //                    LoanName = loanType.LoanName,
-        //                    //PaidAmount = loanDetail.PaidAmount,
-        //                    //BalanceAmount = loanDetail.BalanceAmount,
-        //                    //BalanceDuration = loanDetail.BalanceDuration,
-        //                    LoanAmount = _loan.LoanAmount,
-        //                    DateOfSanction = _loan.DateOfSanction
-        //                }).ToList();
-        //    return loan;
-        //}
+       
     }
 }

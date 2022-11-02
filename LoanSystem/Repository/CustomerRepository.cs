@@ -1,4 +1,5 @@
-﻿using LoanSystem.Models;
+﻿using Castle.Core.Resource;
+using LoanSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
@@ -44,9 +45,20 @@ namespace LoanSystem.Repository
             return _loanDbContext.Customer.ToList();
         }
 
-        public Customer GetById(int id)
+        public CustomerDTO GetById(int id)
         {
-            return _loanDbContext.Customer.Find(id);
+            CustomerDTO customerDTO = new CustomerDTO();
+            var customer = _loanDbContext.Customer.Find(id);
+            if (customer != null)
+            {
+                customerDTO.CustomerId = customer.CustomerId;
+                customerDTO.CustomerName = customer.CustomerName;
+                customerDTO.MobileNumber = customer.MobileNumber;
+                customerDTO.AadharNumber = customer.AadharNumber;
+                customerDTO.EmailId = customer.EmailId;
+                customerDTO.RoleId = customer.RoleId;
+            }
+            return customerDTO;
         }
 
         public Customer GetByName(string name)
@@ -56,9 +68,24 @@ namespace LoanSystem.Repository
 
         public Messages UpdateCustomer(CustomerDTO customer)
         {
+            Customer customers = new Customer();
+            customers.CustomerId = customer.CustomerId;
+            customers.CustomerName = customer.CustomerName;
+            customers.MobileNumber = customer.MobileNumber;
+            customers.AadharNumber = customer.AadharNumber;
+            customers.EmailId = customer.EmailId;
+            customers.Password = customer.Password;
+            customers.RoleId = customer.RoleId;
             Messages message = new Messages();
             message.Success = false;
             var _customer = _loanDbContext.Customer.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
+            var number = _loanDbContext.Customer.Where(x => x.MobileNumber == customers.MobileNumber || x.AadharNumber == customers.AadharNumber).SingleOrDefault();
+            if (number != null)
+            {
+                message.Success = false;
+                message.Message = "Mobile Number or Aadhar Number is already exists";
+                return message;
+            }
             var loan = _loanDbContext.Loan.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
             if (loan == null)
             {
@@ -66,15 +93,16 @@ namespace LoanSystem.Repository
                 _customer.MobileNumber = customer.MobileNumber;
                 _customer.AadharNumber = customer.AadharNumber;
                 _loanDbContext.SaveChanges();
+                message.Success = true;
                 message.Message = "Customer Details modified";
                 return message;
             }
             else
             {
                 message.Message = "Can't modify Customer because they already applied loan";
-                return message;
             }
-
+            var customerDto = _loanDbContext.Customer.FirstOrDefault(x => x.CustomerId == customers.CustomerId);
+            return message;
         }
         public Messages DeleteCustomer(int id)
         {
@@ -98,25 +126,8 @@ namespace LoanSystem.Repository
             }
         }
 
-        public Customer GetByMobileNumber(int mobileNumber)
-        {
-            return _loanDbContext.Customer.FirstOrDefault(x => x.MobileNumber == x.MobileNumber);
-        }
 
-        //public LoginResultDTO GetLoginDetail(string emailId, string password)
-        //{
-        //    var customers = (from customer in _loanDbContext.Customer
-        //                     join role in _loanDbContext.Roles on customer.RoleId equals role.RoleId
-        //                     where customer.EmailId == emailId && customer.Password == password
-        //                     select new LoginResultDTO()
-        //                     {
-        //                         CustomerId = customer.CustomerId,
-        //                         MobileNumber = customer.MobileNumber,
-        //                         RoleName = role.RoleName,
-        //                         EmailId = customer.EmailId
-        //                     }).FirstOrDefault();
-        //    return customers;
-        //}
+        
         public CustomerDTO GetLoginDetail(string emailId, string password)
         {
             var customers = (from customer in _loanDbContext.Customer
@@ -160,5 +171,21 @@ namespace LoanSystem.Repository
                             }).ToList();
             return customer;
         }
+
+        //public CustomerDTO GetByMobileNumber(string mobileNumber)
+        //{
+        //    CustomerDTO customerDTO = new CustomerDTO();
+        //    var customer = _loanDbContext.Customer.FirstOrDefault(x => x.MobileNumber == mobileNumber);
+        //    if(customer !=  null)
+        //    {
+        //        customerDTO.CustomerId = customer.CustomerId;
+        //        customerDTO.CustomerName = customer.CustomerName;
+        //        customerDTO.MobileNumber = customer.MobileNumber;
+        //        customerDTO.AadharNumber = customer.AadharNumber;
+        //        customerDTO.EmailId = customer.EmailId;
+        //        customerDTO.RoleId = customer.RoleId;
+        //    }
+        //    return customerDTO;
+        //}
     }
 }

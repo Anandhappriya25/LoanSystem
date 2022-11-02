@@ -79,9 +79,9 @@ namespace LoanSystem.Controllers
         }
         [Authorize]
         [Authorize(Roles = "Admin,Customer")]
-        public IActionResult CustomerList()
+        public IActionResult CustomerList(int id)
         {
-            var customerList = _customerRepository.CustomerList();
+            var customerList = _customerRepository.GetById(id);
             return View(customerList);
         }
         
@@ -93,7 +93,6 @@ namespace LoanSystem.Controllers
                 Text = a.RoleName,
                 Value = a.RoleId.ToString()
             }).ToList();
-            role.Roles.Insert(0, new SelectListItem { Text = "Select Role", Value = ""});
             return View(role);
         }
 
@@ -114,8 +113,13 @@ namespace LoanSystem.Controllers
         [Authorize(Roles = "Admin,Customer")]
         public IActionResult Update(int id)
         {
-            var customer = _customerRepository.GetById(id);
-            return View("AddCustomer", customer);
+            CustomerDTO role = _customerRepository.GetById(id);
+            role.Roles = _customerRepository.GetAllRole().Select(a => new SelectListItem
+            {
+                Text = a.RoleName,
+                Value = a.RoleId.ToString()
+            }).ToList();
+            return View("AddCustomer", role);
         }
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteCustomer(int id)

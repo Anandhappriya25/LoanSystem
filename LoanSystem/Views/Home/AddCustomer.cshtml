@@ -15,10 +15,15 @@ else
         color: red;
     }
 </style>
+
 @using (Html.BeginForm(FormMethod.Post, new { id = "AddCustomer" }))
 {
+   
     <div class="container border rounded bg-light text-dark w-50 pt-2">
-        @Html.HiddenFor(x=>x.CustomerId, new{@class="form-control"})
+        
+
+        
+            @Html.HiddenFor(x=>x.CustomerId, new{@class="form-control"})
 
         <div class="mb-3 row justify-content-center">
             <div class="col-3">
@@ -57,7 +62,7 @@ else
                 <label class="required">Password:</label>
             </div>
             <div class="col-4">
-                @Html.TextBoxFor(x=>x.Password, new {@class="form-control",required = "required",type="password" })
+                @Html.TextBoxFor(x=>x.Password, new {@class="form-control",required = "required",type="password", placeHolder=""})
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
@@ -65,7 +70,7 @@ else
                 <label class="required">Role Name:</label>
             </div>
             <div class="col-4">
-                @Html.DropDownListFor(x=>x.RoleId,Model.Roles, new {@class="form-control",required = "required" })
+                @Html.DropDownListFor(x=>x.RoleId,Model.Roles,"Select Role", new {@class="form-control",required = "required" })
             </div>
         </div>
         <div class="mb-3 row justify-content-center">

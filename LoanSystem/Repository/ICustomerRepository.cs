@@ -6,9 +6,9 @@ namespace LoanSystem.Repository
     public interface ICustomerRepository
     {
         List<Customer> GetAll();
-        Customer GetById(int id);
+        CustomerDTO GetById(int id);
         Customer GetByName(string name);
-        Customer GetByMobileNumber(int mobileNumber); 
+        //CustomerDTO GetByMobileNumber(int id); 
         Messages AddCustomer(CustomerDTO customer);
         Messages UpdateCustomer(CustomerDTO customer);
         Messages DeleteCustomer(int id);
