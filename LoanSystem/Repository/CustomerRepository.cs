@@ -45,20 +45,10 @@ namespace LoanSystem.Repository
             return _loanDbContext.Customer.ToList();
         }
 
-        public CustomerDTO GetById(int id)
+        public Customer GetById(int id)
         {
-            CustomerDTO customerDTO = new CustomerDTO();
-            var customer = _loanDbContext.Customer.Find(id);
-            if (customer != null)
-            {
-                customerDTO.CustomerId = customer.CustomerId;
-                customerDTO.CustomerName = customer.CustomerName;
-                customerDTO.MobileNumber = customer.MobileNumber;
-                customerDTO.AadharNumber = customer.AadharNumber;
-                customerDTO.EmailId = customer.EmailId;
-                customerDTO.RoleId = customer.RoleId;
-            }
-            return customerDTO;
+            var customer = _loanDbContext.Customer.FirstOrDefault(x => x.CustomerId == id);
+            return customer;
         }
 
         public Customer GetByName(string name)
@@ -157,7 +147,7 @@ namespace LoanSystem.Repository
         public IEnumerable<CustomerDTO> CustomerList()
         {
             var customer = (from customers in _loanDbContext.Customer
-                            join cus in _loanDbContext.Customer on customers.RoleId equals cus.RoleId
+                            //join cus in _loanDbContext.Customer on customers.RoleId equals cus.RoleId
                             join role in _loanDbContext.Roles on customers.RoleId equals role.RoleId
                             //where role.RoleId == customers.RoleId
                             select new CustomerDTO()

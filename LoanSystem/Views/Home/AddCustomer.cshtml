@@ -9,6 +9,7 @@ else
 {
     <div class="text-warning" align="center"><h2>Edit Customer</h2></div>
 }
+
 <style>
     .required:after {
         content: " *";
@@ -46,7 +47,7 @@ else
                  <label class="required">Aadhar Number:</label>
              </div>
              <div class="col-4">
-                @Html.TextBoxFor(x=>x.AadharNumber, new {@class="form-control",required = "required", type="number",maxlength = "12",min="600000000000" })
+                @Html.TextBoxFor(x=>x.AadharNumber, new {@class="form-control",required = "required", type="number",maxlength = "12",min="600000000000",max="699999999999" })
              </div>
         </div>
         <div class="mb-3 row justify-content-center">
@@ -62,7 +63,7 @@ else
                 <label class="required">Password:</label>
             </div>
             <div class="col-4">
-                @Html.TextBoxFor(x=>x.Password, new {@class="form-control",required = "required",type="password", placeHolder=""})
+                @Html.TextBoxFor(x=>x.Password, new {@class="form-control",required = "required",type="password"})
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
@@ -70,7 +71,7 @@ else
                 <label class="required">Role Name:</label>
             </div>
             <div class="col-4">
-                @Html.DropDownListFor(x=>x.RoleId,Model.Roles,"Select Role", new {@class="form-control",required = "required" })
+                @Html.DropDownListFor(x=>x.RoleId,Model.Roles,new {@class="form-control",required="required"})
             </div>
         </div>
         <div class="mb-3 row justify-content-center">
