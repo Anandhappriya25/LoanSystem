@@ -84,15 +84,15 @@ namespace LoanSystem.Controllers
         public IActionResult CustomerDetail(int id)
         {
             Customer customerDetail = _customerRepository.GetById(id);
-            Role role = _customerRepository.GetRoleById(id);
+            Role role = _customerRepository.GetRoleById(customerDetail.RoleId);
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.CustomerId = customerDetail.CustomerId;
             customerDTO.CustomerName = customerDetail.CustomerName;
             customerDTO.MobileNumber = customerDetail.MobileNumber;
-            customerDTO.AadharNumber = customerDetail.AadharNumber;
+            //customerDTO.AadharNumber = customerDetail.AadharNumber;
             customerDTO.EmailId = customerDetail.EmailId;
             customerDTO.Password = customerDetail.Password;
-            customerDTO.RoleId = customerDetail.RoleId;
+            customerDTO.RoleName = role.RoleName;
             return View(customerDTO);
         }
         public IActionResult AddCustomer()
@@ -135,18 +135,50 @@ namespace LoanSystem.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Authorize(Roles = "Admin,Customer")]
-        //public IActionResult Update(int id)
-        //{
-        //    Customer role = _customerRepository.GetById(id);
-        //    role.RoleId = _customerRepository.GetAllRole().Select(a => new SelectListItem
-        //    {
-        //        Text = a.RoleName,
-        //        Value = a.RoleId.ToString()
-        //    }).ToList();
-        //    return View("AddCustomer", role);
-        //}
+        [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
+        public IActionResult Update(int id)
+        {
+            Customer customer = _customerRepository.GetById(id);
+            CustomerDTO customerDTO = new CustomerDTO();
+            customerDTO.CustomerName = customer.CustomerName;
+            customerDTO.MobileNumber = customer.MobileNumber;
+            //customerDTO.AadharNumber = customer.AadharNumber;
+            customerDTO.EmailId = customer.EmailId;
+            customerDTO.Password = customer.Password;
+            customerDTO.RoleId = customer.RoleId;
+            customerDTO.CustomerId = customer.CustomerId;
+            if (User.Identity.IsAuthenticated)
+            {
+                var role = User.Identity.GetClaimValue("role");
+                if (role == "Admin")
+                {
+                    customerDTO.Roles = _customerRepository.GetAllRole().Select(a => new SelectListItem
+                    {
+                        Text = a.RoleName,
+                        Value = a.RoleId.ToString()
+                    }).ToList();
+                    customerDTO.Roles.Insert(0, new SelectListItem { Text = "Select Role", Value = "" });
+                }
+                else
+                {
+                    customerDTO.Roles = _customerRepository.GetAllRole().Where(x => x.RoleName == "Customer").Select(a => new SelectListItem
+                    {
+                        Text = a.RoleName,
+                        Value = a.RoleId.ToString()
+                    }).ToList();
+                }
+            }         
+            return View("AddCustomer", customerDTO);
+
+            //CustomerDTO role = _customerRepository.GetById(id);
+            //role.RoleId = _customerRepository.GetAllRole().Select(a => new SelectListItem
+            //{
+            //    Text = a.RoleName,
+            //    Value = a.RoleId.ToString()
+            //}).ToList();
+            //return View("AddCustomer", role);
+        }
 
 
         [Authorize(Roles = "Admin")]

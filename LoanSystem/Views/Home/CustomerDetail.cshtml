@@ -1,58 +1,84 @@
-﻿@model LoanSystem.Models.CustomerDTO
+﻿@using LoanSystem.Models
+@model CustomerDTO
 
-@*@{
-    ViewData["Title"] = "CustomerDetail";
-}*@
+<button type="button" class="btn btn-light pb-2"
+        style="background-color:lightgoldenrodyellow;" @*onclick="GoIndex()"*@>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+    </svg>
+    Back to List
+</button>
 
-<h1>CustomerDetail</h1>
-
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CustomerId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CustomerName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MobileNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MobileNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AadharNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AadharNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmailId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmailId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RoleId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RoleId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CustomerId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+@using (Html.BeginForm())
+{
+    <div class="container border rounded bg-light text-dark w-50 pt-2">
+        <h2 class="text-primary" align="center">Customer Detail</h2>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Customer Id:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.CustomerId, new{@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Customer Name:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.CustomerName, new {@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Mobile Number:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.MobileNumber, new {@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Aadhar Number:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.AadharNumber, new {@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Email Id:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.EmailId, new {@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Password:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.Password, new {@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Role Name:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.RoleName,new {@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3  row justify-content-center">
+            <div class="col-2">
+                <a class="btn btn-outline-primary" asp-area="" asp-controller="Home" asp-action="Update" asp-route-id="@Model.CustomerId">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                    </svg> Edit
+                </a>
+            </div>
+        </div>
+    </div>
+}

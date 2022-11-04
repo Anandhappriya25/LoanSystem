@@ -8,7 +8,9 @@ namespace LoanSystem.Repository
         List<Customer> GetAll();
         Customer GetById(int id);
         Customer GetByName(string name);
-        //CustomerDTO GetByMobileNumber(int id); 
+        Customer GetByMobileNumber(string mobileNumber);
+        Customer GetByAadharNumber(long aadharNumber);
+        Customer GetByEmailId(string emailId);
         Messages AddCustomer(CustomerDTO customer);
         Messages UpdateCustomer(CustomerDTO customer);
         Messages DeleteCustomer(int id);

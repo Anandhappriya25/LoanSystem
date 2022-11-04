@@ -1,4 +1,5 @@
-﻿using Castle.Core.Resource;
+﻿using AspNetCore;
+using Castle.Core.Resource;
 using LoanSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -55,6 +56,21 @@ namespace LoanSystem.Repository
         {
             return _loanDbContext.Customer.FirstOrDefault(x => x.CustomerName == name);
         }
+        public Customer GetByMobileNumber(string mobileNumber)
+        {
+            var mobile = _loanDbContext.Customer.FirstOrDefault(x => x.MobileNumber == mobileNumber);
+            return mobile;
+        }
+        public Customer GetByAadharNumber(long aadharNumber)
+        {
+            var aadhar = _loanDbContext.Customer.FirstOrDefault(x => x.AadharNumber == aadharNumber);
+            return aadhar;
+        }
+        public Customer GetByEmailId(string emailId)
+        {
+            var email = _loanDbContext.Customer.FirstOrDefault(x => x.EmailId == emailId);
+            return email;
+        }
 
         public Messages UpdateCustomer(CustomerDTO customer)
         {
@@ -68,20 +84,27 @@ namespace LoanSystem.Repository
             customers.RoleId = customer.RoleId;
             Messages message = new Messages();
             message.Success = false;
-            var _customer = _loanDbContext.Customer.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
-            var number = _loanDbContext.Customer.Where(x => x.MobileNumber == customers.MobileNumber || x.AadharNumber == customers.AadharNumber).SingleOrDefault();
-            if (number != null)
+            var customerId = GetById(customers.CustomerId);
+            var mobileNumber = GetByMobileNumber(customers.MobileNumber);
+            var aadharNumber = GetByAadharNumber(customers.AadharNumber);
+            var loan = _loanDbContext.Loan.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
+            if (customerId == null)
             {
-                message.Success = false;
-                message.Message = "Mobile Number or Aadhar Number is already exists";
+                message.Message = "Customer Id not found";
+                return message;
+            }     
+            if(mobileNumber != null && mobileNumber.CustomerId != customerId.CustomerId )
+            {
+                message.Message = "Can't modify ";
                 return message;
             }
-            var loan = _loanDbContext.Loan.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
             if (loan == null)
             {
-                _customer.CustomerName = customer.CustomerName;
-                _customer.MobileNumber = customer.MobileNumber;
-                _customer.AadharNumber = customer.AadharNumber;
+                customerId.CustomerName = customer.CustomerName;
+                customerId.MobileNumber = customer.MobileNumber;
+                customerId.AadharNumber = customer.AadharNumber;
+                customerId.EmailId = customer.EmailId;
+                customerId.Password = customer.Password; 
                 _loanDbContext.SaveChanges();
                 message.Success = true;
                 message.Message = "Customer Details modified";
