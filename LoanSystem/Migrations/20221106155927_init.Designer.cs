@@ -4,6 +4,7 @@ using LoanSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanSystem.Migrations
 {
     [DbContext(typeof(LoanDbContext))]
-    partial class LoanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221106155927_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,6 +58,8 @@ namespace LoanSystem.Migrations
 
                     b.HasKey("CustomerId");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Customer");
                 });
 
@@ -80,6 +84,8 @@ namespace LoanSystem.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("LoanId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("LoanTypeId");
 
@@ -110,6 +116,8 @@ namespace LoanSystem.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("LoanDetailsId");
+
+                    b.HasIndex("LoanId");
 
                     b.ToTable("LoanDetails");
                 });
@@ -151,15 +159,45 @@ namespace LoanSystem.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("LoanSystem.Models.Customer", b =>
+                {
+                    b.HasOne("LoanSystem.Models.Role", "Roles")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Roles");
+                });
+
             modelBuilder.Entity("LoanSystem.Models.Loan", b =>
                 {
+                    b.HasOne("LoanSystem.Models.Customer", "Customers")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LoanSystem.Models.LoanType", "LoanTypes")
                         .WithMany()
                         .HasForeignKey("LoanTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Customers");
+
                     b.Navigation("LoanTypes");
+                });
+
+            modelBuilder.Entity("LoanSystem.Models.LoanDetails", b =>
+                {
+                    b.HasOne("LoanSystem.Models.Loan", "Loans")
+                        .WithMany()
+                        .HasForeignKey("LoanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Loans");
                 });
 #pragma warning restore 612, 618
         }
