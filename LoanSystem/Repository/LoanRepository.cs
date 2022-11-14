@@ -18,10 +18,15 @@ namespace LoanSystem.Repository
         {
             return _loanDbContext.Loan.ToList();
         }
+        public Loan GetById(int id)
+        {
+            return _loanDbContext.Loan.Find(id);
+        }
+        
         public LoanDetailDTO GetLoanById(int id)
         {
             LoanDetailDTO loanDetail = new LoanDetailDTO();
-            var loan =  _loanDbContext.Loan.Find(id);
+            var loan =  _loanDbContext.Loan.Find(loanDetail.CustomerId);
             if(loan != null)
             {
                 loanDetail.LoanId = loan.LoanId;
@@ -35,7 +40,6 @@ namespace LoanSystem.Repository
 
         public Messages AddLoan(LoanDetailDTO loanDetail)
         {
-
             Loan loan = new Loan();
             loan.LoanId = loanDetail.LoanId;
             loan.CustomerId = loanDetail.CustomerId;
@@ -51,15 +55,15 @@ namespace LoanSystem.Repository
                 message.Message = "LoanTypeId not exists";
                 return message;
             }
-            var customer = GetById(loan.CustomerId);
+            var customer = GetByCustomerId(loan.CustomerId);
             if (customer == null)
             {
                 message.Success = false;
                 message.Message = "CustomerId not exists";
                 return message;
             }
-            var _loan = _loanDbContext.LoanDetails.Find(loanDetail.CustomerId);
-            if (_loan == null)
+            var _loan = _loanDbContext.Loan.Find(loanDetail.CustomerId);
+            if (_loan != null)
             {
                 _loanDbContext.Add(loan);
                 _loanDbContext.SaveChanges();
@@ -108,7 +112,7 @@ namespace LoanSystem.Repository
             return _loanDbContext.LoanType.Find(id);
         }
 
-        public Customer GetById(int id)
+        public Customer GetByCustomerId(int id)
         {
             return _loanDbContext.Customer.Find(id);
         }
@@ -135,6 +139,45 @@ namespace LoanSystem.Repository
             return loan;
         }
 
-       
+        public IEnumerable<CustomerDTO> GetLoanByCustomerId(int customerId)
+        {
+            var customers = (from loan in _loanDbContext.Loan
+                             //join loans in _loanDbContext.Loan on loan.LoanId equals loans.LoanId
+                             join customer in _loanDbContext.Customer on loan.CustomerId equals customer.CustomerId
+                             join loanType in _loanDbContext.LoanType on loan.LoanTypeId equals loanType.LoanTypeId
+                             where loan.CustomerId == customerId
+                             select new CustomerDTO
+                             {
+                                 CustomerId = customerId,
+                                 CustomerName = customer.CustomerName,
+                                 LoanName = loanType.LoanName,
+                                 LoanAmount = loan.LoanAmount,
+                                 DateOfSanction = loan.DateOfSanction
+                             }).ToList();
+            return customers;
+        }
+
+        //for loan 
+        public CustomerDTO GetCustomer(int customerId)
+        {
+            var loans = (from customer in _loanDbContext.Customer
+                         join loan in _loanDbContext.Loan on customer.CustomerId equals loan.CustomerId
+                         join loanType in _loanDbContext.LoanType on loan.LoanTypeId equals loanType.LoanTypeId
+                         where customer.CustomerId == customerId
+                         select new CustomerDTO
+                         {
+                             CustomerId = customerId,
+                             CustomerName = customer.CustomerName,
+                             LoanName = loanType.LoanName,
+                             LoanId = loan.LoanId,
+                             LoanAmount = loan.LoanAmount,
+                             DateOfSanction = loan.DateOfSanction
+                         }).FirstOrDefault();
+            return loans;
+        }
+        public LoanDetailDTO GetLoan(int customerId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

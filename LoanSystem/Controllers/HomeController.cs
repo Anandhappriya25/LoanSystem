@@ -1,13 +1,12 @@
 ﻿using LoanSystem.Models;
-using LoanSystem.Models.DTO;
 using LoanSystem.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Castle.Core.Resource;
 
 namespace LoanSystem.Controllers
 {
@@ -47,8 +46,9 @@ namespace LoanSystem.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier , user.CustomerId.ToString()),
-                    new Claim(ClaimTypes.Name, user.EmailId),
-                    new Claim(ClaimTypes.Role, user.RoleName)
+                    new Claim(ClaimTypes.Name, user.MobileNumber),
+                    new Claim(ClaimTypes.Role, user.RoleName),
+                    new Claim(ClaimTypes.Email, user.EmailId)
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, "Login");
 
@@ -65,23 +65,23 @@ namespace LoanSystem.Controllers
             }
         }
 
-
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Login", "Index");
+            return RedirectToAction("Login","Home");
         }
 
 
-        [Authorize(Roles = "Admin,Customer")]   
+        [Authorize(Roles = "Admin")]   
         public IActionResult CustomerList()
         {
             var customerList = _customerRepository.CustomerList();
             return View(customerList);
         }
 
-        [Authorize(Roles = "Admin,Customer")]
-        public IActionResult CustomerDetail(int id)
+        [Authorize]
+        public IActionResult Detail(int id)
         {
             Customer customerDetail = _customerRepository.GetById(id);
             Role role = _customerRepository.GetRoleById(customerDetail.RoleId);
@@ -89,23 +89,44 @@ namespace LoanSystem.Controllers
             customerDTO.CustomerId = customerDetail.CustomerId;
             customerDTO.CustomerName = customerDetail.CustomerName;
             customerDTO.MobileNumber = customerDetail.MobileNumber;
-            //customerDTO.AadharNumber = customerDetail.AadharNumber;
+            customerDTO.AadharNumber = customerDetail.AadharNumber;
             customerDTO.EmailId = customerDetail.EmailId;
             customerDTO.Password = customerDetail.Password;
             customerDTO.RoleName = role.RoleName;
             return View(customerDTO);
         }
+
+        [Authorize]
+        public IActionResult Information(int id)
+        {
+            var loan = _loanRepository.GetCustomer(id);
+            return View(loan);
+        }
+
+        [Authorize]
+        public IActionResult LoanInformation(int id)
+        {
+            LoanDetailList loanDetailList = new LoanDetailList();
+            var customer = _customerRepository.GetById(id);
+            loanDetailList.CustomerName = customer.CustomerName;
+            var loan = _loanRepository.GetLoans().FirstOrDefault(x => x.CustomerId == id);
+            loanDetailList.LoanId = loan.LoanId;
+            loanDetailList.Customers = _loanDetailRepository.LoanDetailsById(id);
+            return View(loanDetailList);
+        }
+
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult AddCustomer()
         {
             CustomerDTO customerDTO = new CustomerDTO();
             if (User.Identity.IsAuthenticated)
             {
-                var role = User.Identity.GetClaimValue("role");
+                var role = User.Identity.GetClaimRole();
                 if (role == "Admin")
                 {
                     customerDTO.Roles = _customerRepository.GetAllRole().Select(a => new SelectListItem
                     {
-                        Text = a.RoleName,
+                        Text = a.RoleName + "(" + a.RoleId + ")",
                         Value = a.RoleId.ToString()
                     }).ToList();
                     customerDTO.Roles.Insert(0, new SelectListItem { Text = "Select Role", Value = "" });
@@ -115,7 +136,7 @@ namespace LoanSystem.Controllers
             {
                 customerDTO.Roles = _customerRepository.GetAllRole().Where(x => x.RoleName == "Customer").Select(a => new SelectListItem
                 {
-                    Text = a.RoleName,
+                    Text = a.RoleName + "(" + a.RoleId + ")",
                     Value = a.RoleId.ToString()
                 }).ToList();
             }
@@ -143,14 +164,14 @@ namespace LoanSystem.Controllers
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.CustomerName = customer.CustomerName;
             customerDTO.MobileNumber = customer.MobileNumber;
-            //customerDTO.AadharNumber = customer.AadharNumber;
+            customerDTO.AadharNumber = customer.AadharNumber;
             customerDTO.EmailId = customer.EmailId;
             customerDTO.Password = customer.Password;
             customerDTO.RoleId = customer.RoleId;
             customerDTO.CustomerId = customer.CustomerId;
             if (User.Identity.IsAuthenticated)
             {
-                var role = User.Identity.GetClaimValue("role");
+                var role = User.Identity.GetClaimRole();
                 if (role == "Admin")
                 {
                     customerDTO.Roles = _customerRepository.GetAllRole().Select(a => new SelectListItem
@@ -171,13 +192,6 @@ namespace LoanSystem.Controllers
             }         
             return View("AddCustomer", customerDTO);
 
-            //CustomerDTO role = _customerRepository.GetById(id);
-            //role.RoleId = _customerRepository.GetAllRole().Select(a => new SelectListItem
-            //{
-            //    Text = a.RoleName,
-            //    Value = a.RoleId.ToString()
-            //}).ToList();
-            //return View("AddCustomer", role);
         }
 
 
@@ -194,6 +208,7 @@ namespace LoanSystem.Controllers
             return View(loanTypeList);
         }
 
+        [Authorize]
         public IActionResult AddLoanType()
         {
             return View();
@@ -234,15 +249,31 @@ namespace LoanSystem.Controllers
             return View(loanList);
         }
 
+        [Authorize(Roles ="Admin,Customer")]      
+        
         public IActionResult AddLoan()
         {
+            var id = User.Identity.GetClaimId();
+            var role = User.Identity.GetClaimRole();
             LoanDetailDTO details = new LoanDetailDTO();
-            details.Customers = _customerRepository.GetAll().Select(a => new SelectListItem
+            if (role == "Admin")
             {
-                Text = a.CustomerName + "(" + a.CustomerId + ")" ,
-                Value = a.CustomerId.ToString()
-            }).ToList();
-            details.Customers.Insert(0, new SelectListItem { Text = "Select Customer", Value = "" });
+                details.Customers = _customerRepository.GetAll().Select(a => new SelectListItem
+                {
+                    Text = a.CustomerName + "(" + a.CustomerId + ")",
+                    Value = a.CustomerId.ToString()
+                }).ToList();
+                details.Customers.Insert(0, new SelectListItem { Text = "Select Customer", Value = "" });
+                
+            }
+            else
+            {
+                details.Customers = _customerRepository.GetAll().Where(x => x.CustomerId == x.CustomerId).Select(a => new SelectListItem
+                {
+                    Text = a.CustomerName + "(" + a.CustomerId + ")",
+                    Value = a.CustomerId.ToString()
+                }).ToList();
+            }            
             details.LoanTypes = _loanTypeRepository.GetAll().Select(a => new SelectListItem
             {
                 Text = a.LoanName + "(" + a.LoanTypeId + ")",
@@ -251,7 +282,6 @@ namespace LoanSystem.Controllers
             details.LoanTypes.Insert(0, new SelectListItem { Text = "Select LoanType", Value = "" });
             return View(details);
         }
-
         
 
         [HttpPost]
@@ -262,7 +292,7 @@ namespace LoanSystem.Controllers
                 return Json(_loanRepository.UpdateLoan(loan));
             }
             else
-            {
+            { 
                 return Json(_loanRepository.AddLoan(loan));
             }
         }
@@ -271,6 +301,7 @@ namespace LoanSystem.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult EditLoan(int id)
         {
+            Loan loan = _loanRepository.GetById(id);
             LoanDetailDTO details = _loanRepository.GetLoanById(id);
             details.Customers = _customerRepository.GetAll().Select(a => new SelectListItem
             {
@@ -282,7 +313,7 @@ namespace LoanSystem.Controllers
                 Text = a.LoanName,
                 Value = a.LoanTypeId.ToString()
             }).ToList();
-            //details.DateOfSanction = 
+            details.DateOfSanction = loan.DateOfSanction;
             return View("AddLoan", details);
         }
 
@@ -294,9 +325,14 @@ namespace LoanSystem.Controllers
             var loanDetailList = _loanDetailRepository.GetAll();
             return View(loanDetailList);
         }
+        
 
-        public IActionResult PayLoan()
+        [Authorize]
+        public IActionResult PayLoan(int id)
         {
+            LoanDetailDTO loanDetailDTO = new LoanDetailDTO();
+            var loan = _loanRepository.GetLoans().FirstOrDefault(x => x.CustomerId == id);
+            //loanDetailDTO.LoanId = loan.LoanId;
             return View();
         }
 
@@ -329,11 +365,13 @@ namespace LoanSystem.Controllers
             return Json(closeLoanDetail);
         }
 
-        public IActionResult GetLoanDetailsById(int id)
+        public IActionResult GetLoanDetailsId(int id)
         {
             var loanDetail = _loanDetailRepository.GetLoanandCustomerDetails(id);
             return Json(loanDetail);
         }
 
+
+       
     }
 }

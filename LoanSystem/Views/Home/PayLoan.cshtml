@@ -1,14 +1,12 @@
 ﻿@using LoanSystem.Models
-@model LoanDetails
+@model LoanDetailDTO
 
-@if (Model == null)
-{
-    <div class="text-primary" align="center"><h2>Pay Loan</h2> </div>
+@{
+    var id = User.Identity.GetClaimId();
+    var role = User.Identity.GetClaimRole();
 }
-else
-{
-    <div class="text-warning" align="center"><h2>Update PayedLoan</h2></div>
-}
+
+
 <style>
     .required:after {
         content: " *";
@@ -18,9 +16,20 @@ else
 
 @using (Html.BeginForm(FormMethod.Post, new { id = "PayLoan" }))
 {
+    @if (Model == null)
+    {
+        <div class="text-primary" align="center"><h2>Pay Loan</h2> </div>
+    }
+    else
+    {
+        <div class="text-warning" align="center"><h2>Update PayedLoan</h2></div>
+    }
+
      <div class="container border rounded bg-light text-dark w-50 pt-2">
         @Html.HiddenFor(x=>x.LoanDetailsId, new{@class="form-control"})
-       
+
+        @Html.DisplayFor(x=>x.LoanId, new{@class="form-control"})
+        
         <div class="mb-3 row justify-content-center">
             <div class="col-3">
                 <label class="form-label required">LoanId:</label>

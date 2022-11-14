@@ -10,6 +10,7 @@ namespace LoanSystem.Repository
         Messages UpdatePayedLoan(LoanDetails loanDetails);
         Messages LoanClosed(int id);
         IEnumerable<LoanDetailDTO> GetLoanandCustomerDetails(int id);
+        List<LoanDetailDTO> LoanDetailsById(int id);
 
     }
 }

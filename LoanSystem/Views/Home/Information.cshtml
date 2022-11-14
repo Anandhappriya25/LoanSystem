@@ -1,0 +1,49 @@
+﻿@using LoanSystem.Models
+@model CustomerDTO
+
+@using (Html.BeginForm())
+{
+    <div class="container border rounded bg-light text-dark w-50 pt-2">
+        <h2 class="text-primary" align="center">Customer Detail</h2>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Loan Id:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.LoanId, new{@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Customer Name:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.CustomerName, new{@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Loan Name:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.LoanName, new{@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Loan Amount:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.LoanAmount, new{@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="form-label">Date of Sanction:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.DateOfSanction, new{@class="form-control",disabled="disabled"})
+            </div>
+        </div>
+    </div>
+}

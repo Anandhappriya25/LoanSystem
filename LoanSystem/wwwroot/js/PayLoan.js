@@ -8,9 +8,10 @@
             dataType: 'json',
             success: function (response) {
                 alert(response.message);
-                if (response.success == true) {
-                    setTimeout(function () { window.location = '/Home/LoanDetailList'; }, 1000);
+                if (response.success == true){
+                    setTimeout(function () { window.location = '/Home/LoanInformation'; }, 1000);                    
                 }
+                setTimeout(function () { location.reload() });
             },
             error: function () {
                 alert("error in adding new loan");
@@ -40,7 +41,7 @@
 function getDetails() {
     if ($('#LoanId').val()) {
         $.ajax({
-            url: "/Home/GetLoadDetailsById?id=" + $("#LoanId").val(),
+            url: "/Home/GetLoanDetailsId?id=" + $("#LoanId").val(),
             type: "Get",
             success: function (response) {
                 console.log(response);

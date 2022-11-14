@@ -1,5 +1,4 @@
-﻿using AspNetCore;
-using Castle.Core.Resource;
+﻿using Castle.Core.Resource;
 using LoanSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -25,11 +24,25 @@ namespace LoanSystem.Repository
             _customer.Password = customers.Password;
             _customer.RoleId = customers.RoleId;
             Messages message = new Messages();
-            var customer = _loanDbContext.Customer.Where(x => x.MobileNumber == customers.MobileNumber || x.AadharNumber == customers.AadharNumber).SingleOrDefault();
-            if (customer != null)
+            message.Role = customers.Role;
+            message.Success = false;
+            //var customer = _loanDbContext.Customer.Where(x => x.MobileNumber == customers.MobileNumber || x.AadharNumber == customers.AadharNumber).SingleOrDefault();
+            var mobile = GetByMobileNumber(_customer.MobileNumber);
+            var aadhar = GetByAadharNumber(_customer.AadharNumber);
+            var email = GetByEmailId(_customer.EmailId);
+            if (mobile != null)
             {
-                message.Success = false;
-                message.Message = "Mobile Number or Aadhar Number is already exists";
+                message.Message = "Mobile Number is already exists";
+                return message;
+            }
+            if (aadhar != null)
+            {
+                message.Message = "Aadhar Number is already exists";
+                return message;
+            }
+            if (email != null)
+            {
+                message.Message = "MEmailId already Registered.";
                 return message;
             }
             else
@@ -87,7 +100,6 @@ namespace LoanSystem.Repository
             var customerId = GetById(customers.CustomerId);
             var mobileNumber = GetByMobileNumber(customers.MobileNumber);
             var aadharNumber = GetByAadharNumber(customers.AadharNumber);
-            var loan = _loanDbContext.Loan.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
             if (customerId == null)
             {
                 message.Message = "Customer Id not found";
@@ -98,6 +110,7 @@ namespace LoanSystem.Repository
                 message.Message = "Can't modify ";
                 return message;
             }
+            var loan = _loanDbContext.Loan.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
             if (loan == null)
             {
                 customerId.CustomerName = customer.CustomerName;
@@ -157,6 +170,8 @@ namespace LoanSystem.Repository
             return customers;
         }
 
+
+
         public Role GetRoleById(int id)
         {
             return _loanDbContext.Roles.Find(id);
@@ -170,7 +185,6 @@ namespace LoanSystem.Repository
         public IEnumerable<CustomerDTO> CustomerList()
         {
             var customer = (from customers in _loanDbContext.Customer
-                            //join cus in _loanDbContext.Customer on customers.RoleId equals cus.RoleId
                             join role in _loanDbContext.Roles on customers.RoleId equals role.RoleId
                             //where role.RoleId == customers.RoleId
                             select new CustomerDTO()
@@ -185,20 +199,7 @@ namespace LoanSystem.Repository
             return customer;
         }
 
-        //public CustomerDTO GetByMobileNumber(string mobileNumber)
-        //{
-        //    CustomerDTO customerDTO = new CustomerDTO();
-        //    var customer = _loanDbContext.Customer.FirstOrDefault(x => x.MobileNumber == mobileNumber);
-        //    if(customer !=  null)
-        //    {
-        //        customerDTO.CustomerId = customer.CustomerId;
-        //        customerDTO.CustomerName = customer.CustomerName;
-        //        customerDTO.MobileNumber = customer.MobileNumber;
-        //        customerDTO.AadharNumber = customer.AadharNumber;
-        //        customerDTO.EmailId = customer.EmailId;
-        //        customerDTO.RoleId = customer.RoleId;
-        //    }
-        //    return customerDTO;
-        //}
+        
+        
     }
 }

@@ -4,6 +4,7 @@ namespace LoanSystem.Models
 {
     public class LoanDetailDTO
     {
+        public int LoanDetailsId { get; set; }
         public int LoanId { get; set; }
         public int LoanTypeId { get; set; }
         public int CustomerId { get; set; }
@@ -18,5 +19,12 @@ namespace LoanSystem.Models
         public int BalanceDuration { get; set; }
         public List<SelectListItem> Customers { get; set; }
         public List<SelectListItem> LoanTypes { get; set; }
+    }
+
+    public class LoanDetailList
+    {
+        public string CustomerName { get; set; }
+        public int LoanId { get; set; }
+        public List<LoanDetailDTO> Customers { get; set; }
     }
 }

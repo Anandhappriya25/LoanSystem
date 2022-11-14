@@ -14,6 +14,12 @@ namespace LoanSystem.Models
         public string Password { get; set; }
         public int RoleId { get; set; }
         public string RoleName { get; set; }
+        public int LoanId { get; set; }
+        public int LoanTypeId { get; set; }
+        public string LoanName { get; set; }
+        public DateTime DateOfSanction { get; set; }
+        public int LoanAmount { get; set; }
         public List<SelectListItem> Roles { get; set; }
+        public bool Role { get; set; }
     }
 }

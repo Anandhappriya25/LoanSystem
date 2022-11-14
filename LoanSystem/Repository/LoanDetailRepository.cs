@@ -1,5 +1,4 @@
 ﻿using LoanSystem.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace LoanSystem.Repository
 {
@@ -17,7 +16,7 @@ namespace LoanSystem.Repository
         }
         public LoanDetails GetById(int id)
         {
-            var loanDetail = _loanDbContext.LoanDetails.Find(id);
+            var loanDetail = _loanDbContext.LoanDetails.FirstOrDefault(x=>x.LoanId == id);
             if (loanDetail == null)
             {
                 throw new Exception("LoanDetails Id not found ");
@@ -45,7 +44,30 @@ namespace LoanSystem.Repository
                             TotalPaidAmount = loanDetail.TotalPaidAmount
                         }).ToList();
             return loan;
+        }
 
+        public List<LoanDetailDTO> LoanDetailsById(int id)
+        {
+            var details = (from loanDetails in _loanDbContext.LoanDetails
+                        join loan in _loanDbContext.Loan on loanDetails.LoanId equals loan.LoanId
+                        join customer in _loanDbContext.Customer on loan.CustomerId equals customer.CustomerId
+                        join loanType in _loanDbContext.LoanType on loan.LoanTypeId equals loanType.LoanTypeId
+                        where loan.CustomerId == id
+                        select new LoanDetailDTO()
+                        {
+                            LoanDetailsId = loanDetails.LoanDetailsId,
+                            LoanId = loanDetails.LoanId,
+                            CustomerId = customer.CustomerId,
+                            CustomerName = customer.CustomerName,
+                            LoanName = loanType.LoanName,
+                            PaidAmount = loanDetails.PaidAmount,
+                            BalanceAmount = loanDetails.BalanceAmount,
+                            BalanceDuration = loanDetails.BalanceDuration,
+                            LoanAmount = loan.LoanAmount,
+                            DateOfSanction = loan.DateOfSanction,
+                            TotalPaidAmount = loanDetails.TotalPaidAmount
+                        }).ToList();
+            return details;
         }
 
 
@@ -68,7 +90,6 @@ namespace LoanSystem.Repository
             }
             if (lastPay == null)
             {
-
                 loanDetails.BalanceAmount = loan.LoanAmount - loanDetails.PaidAmount;
                 loanDetails.TotalPaidAmount = loanDetails.PaidAmount;
                 loanDetails.BalanceDuration = duration.Duration - 1;
@@ -149,8 +170,6 @@ namespace LoanSystem.Repository
                 message.Message = " Your Loan is Not completed !!!!";
                 return message;
             }
-
-
         }
     }
 }

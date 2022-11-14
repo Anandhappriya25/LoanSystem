@@ -9,11 +9,15 @@ namespace LoanSystem.Models
         [Key]
         public int LoanId { get; set; }
 
-        [ForeignKey("LoanType")]
-        public int LoanTypeId { get; set; }
+        [Display(Name = "LoanType")]
+        public virtual int LoanTypeId { get; set; }
+
+        [ForeignKey("LoanTypeId")]
+        public virtual LoanType LoanTypes { get; set; }
 
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
+
 
         [Required(ErrorMessage = "Please enter the loan sanction date")]
         public DateTime DateOfSanction { get; set; }

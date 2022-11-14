@@ -1,0 +1,51 @@
+﻿@using LoanSystem.Models
+@model LoanDetailList
+
+<div class="col-5">
+    <label>Customer Name:</label>
+    @Model.CustomerName
+</div>
+<div class="col-5">
+    <label>Loan Id :</label>
+    @Model.LoanId
+</div>
+
+<div style ="float:right;">
+    <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="PayLoan" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z" />
+            <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
+        </svg>Pay Loan
+    </a>
+</div>
+<h2 style="font-weight;"> LoanDetail List </h2>
+<table class="table table-hover" id="dataTable">
+    <thead style="background-color: lightcyan;">
+        <tr>
+            <th class="text-center">LoanDetailsId</th>
+            <th class="text-center">Paid Amount</th>
+            <th class="text-center">Balance Amount</th>
+            <th class="text-center">Balance Duration</th>
+            <th class="text-center">Total PaidAmount</th>
+            <th class="text-center" data-orderable="false">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (LoanDetailDTO loanDetails in Model.Customers)
+        {
+            <tr>
+                <td class="text-center">@loanDetails.LoanDetailsId</td>
+                <td class="text-center">@loanDetails.PaidAmount</td>
+                <td class="text-center">@loanDetails.BalanceAmount</td>
+                <td class="text-center">@loanDetails.BalanceDuration</td>
+                <td class="text-center">@loanDetails.TotalPaidAmount</td>
+                <td class="text-center">
+                    <a href="#" class="btn btn-info"> @(loanDetails.BalanceAmount == 0 ? "Loan Completed" : "Loan Pending") </a>
+                </td>
+
+           </tr>
+        }
+    </tbody>
+</table>
+
+
